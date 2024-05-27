@@ -5,7 +5,7 @@ from aiogram import Dispatcher
 from bot import bot
 from app.handlers import router
 
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
 dp = Dispatcher()
 
