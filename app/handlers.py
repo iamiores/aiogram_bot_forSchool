@@ -1,6 +1,6 @@
 from aiogram import F, Router
 from aiogram.filters import CommandStart, Command
-from aiogram.types import Message, BufferedInputFile, InputMediaPhoto, User
+from aiogram.types import Message, BufferedInputFile, InputMediaPhoto
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 
@@ -20,6 +20,8 @@ class Form(StatesGroup):
     military_state = State()
     war_victims_state = State()
     support_state = State()
+    awaiting_question_tech = State()
+    awaiting_question_law = State()
 
 
 user_message_mapping_tech = {}
@@ -71,11 +73,11 @@ async def tech_support(message: Message, state: FSMContext):
         await forward_to_tech_admin(message)
         await state.clear()
     else:
-        await state.set_state({'awaiting_question_tech': True})
+        await state.set_state(Form.awaiting_question_tech.state)
 
         async def check_for_question_tech(message: Message):
             check_state = await state.get_state()
-            if 'awaiting_question_tech' in check_state and check_state['awaiting_question_tech']:
+            if check_state == Form.awaiting_question_tech.state:
                 await forward_to_tech_admin(message)
 
         @router.message()
@@ -115,11 +117,11 @@ async def law_support(message: Message, state: FSMContext):
         await forward_to_law_admin(message)
         await state.clear()
     else:
-        await state.set_state({'awaiting_question_law': True})
+        await state.set_state(Form.awaiting_question_law.state)
 
         async def check_for_question_law(message: Message):
             check_state = await state.get_state()
-            if 'awaiting_question_law' in check_state and check_state['awaiting_question_law']:
+            if check_state == Form.awaiting_question_law.state:
                 await forward_to_law_admin(message)
 
         @router.message()
