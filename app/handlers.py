@@ -47,14 +47,26 @@ async def tech_support(message: Message, state: FSMContext):
         await message.reply('Вибач, ти не можеш надсилати повідомлення самому собі:(', reply_markup=main)
         return
     else:
-        await message.answer('Надішліть ваше питання.')
+        await message.answer(can_send, parse_mode='HTML')
 
     async def forward_to_tech_admin(message: Message):
         if message.from_user.id != int(ADMIN_TECH_USER_ID):
-            forward_message = await bot.send_message(ADMIN_TECH_USER_ID, f'{message.from_user.first_name}\n{message.from_user.username}\n{message.text}')
-            user_message_mapping_tech[forward_message.message_id] = message.from_user.id
-            await message.answer('Ваше повідомлення було надіслано.', reply_markup=main)
-            # print(forward_message.message_id)
+            forward_message = None
+            caption = f'{message.from_user.first_name}\n@{message.from_user.username}'
+            if message.text:
+                forward_message = await bot.send_message(ADMIN_TECH_USER_ID, f'{caption}\n{message.text}')
+            elif message.photo:
+                caption += f'\n{message.caption}' if message.caption else ''
+                forward_message = await bot.send_photo(ADMIN_TECH_USER_ID, message.photo[-1].file_id, caption=caption)
+            elif message.video:
+                caption += f'\n{message.caption}' if message.caption else ''
+                forward_message = await bot.send_video(ADMIN_TECH_USER_ID, message.video.file_id, caption=caption)
+            elif message.voice:
+                caption += f'\n{message.caption}' if message.caption else ''
+                forward_message = await bot.send_voice(ADMIN_TECH_USER_ID, message.voice.file_id, caption=caption)
+            if forward_message:
+                user_message_mapping_tech[forward_message.message_id] = message.from_user.id
+                await message.answer('Ваше повідомлення було надіслано.', reply_markup=main)
         else:
             if message.reply_to_message and message.reply_to_message.message_id:
                 message_id = message.reply_to_message.message_id
@@ -95,10 +107,22 @@ async def law_support(message: Message, state: FSMContext):
 
     async def forward_to_law_admin(message: Message):
         if message.from_user.id != int(ADMIN_LAW_USER_ID):
-            forward_message = await bot.send_message(ADMIN_LAW_USER_ID, f'{message.from_user.first_name}\n{message.from_user.id}\n{message.text}')
-            user_message_mapping_law[forward_message.message_id] = message.from_user.id
-            await message.answer('Ваше повідомлення було надіслано.', reply_markup=main)
-            # print(forward_message.message_id)
+            forward_message = None
+            caption = f'{message.from_user.first_name}\n@{message.from_user.username}'
+            if message.text:
+                forward_message = await bot.send_message(ADMIN_LAW_USER_ID, f'{caption}\n{message.text}')
+            elif message.photo:
+                caption += f'\n{message.caption}' if message.caption else ''
+                forward_message = await bot.send_photo(ADMIN_LAW_USER_ID, message.photo[-1].file_id, caption=caption)
+            elif message.video:
+                caption += f'\n{message.caption}' if message.caption else ''
+                forward_message = await bot.send_video(ADMIN_LAW_USER_ID, message.video.file_id, caption=caption)
+            elif message.voice:
+                caption += f'\n{message.caption}' if message.caption else ''
+                forward_message = await bot.send_voice(ADMIN_LAW_USER_ID, message.voice.file_id, caption=caption)
+            if forward_message:
+                user_message_mapping_tech[forward_message.message_id] = message.from_user.id
+                await message.answer('Ваше повідомлення було надіслано.', reply_markup=main)
         else:
             if message.reply_to_message and message.reply_to_message.message_id:
                 message_id = message.reply_to_message.message_id
