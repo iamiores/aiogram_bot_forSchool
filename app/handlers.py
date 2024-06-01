@@ -103,7 +103,7 @@ async def law_support(message: Message, state: FSMContext):
         await message.reply('Вибач, ви не можете надсилати повідомлення самому собі:(', reply_markup=main)
         return
     else:
-        await message.answer('Надішліть ваше питання.')
+        await message.answer(can_send, parse_mode='HTML')
 
     async def forward_to_law_admin(message: Message):
         if message.from_user.id != int(ADMIN_LAW_USER_ID):
