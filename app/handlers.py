@@ -47,7 +47,7 @@ async def tech_support(message: Message, state: FSMContext):
         await message.reply('Вибач, ти не можеш надсилати повідомлення самому собі:(', reply_markup=main)
         return
     else:
-        await message.answer(can_send, parse_mode='HTML')
+        await message.answer(can_send_txt, parse_mode='HTML')
 
     async def forward_to_tech_admin(message: Message):
         if message.from_user.id != int(ADMIN_TECH_USER_ID):
@@ -103,7 +103,7 @@ async def law_support(message: Message, state: FSMContext):
         await message.reply('Вибач, ви не можете надсилати повідомлення самому собі:(', reply_markup=main)
         return
     else:
-        await message.answer(can_send, parse_mode='HTML')
+        await message.answer(can_send_txt, parse_mode='HTML')
 
     async def forward_to_law_admin(message: Message):
         if message.from_user.id != int(ADMIN_LAW_USER_ID):
@@ -155,14 +155,14 @@ async def law_support(message: Message, state: FSMContext):
 
 # VPO
 @router.message(F.text == 'ВПО')
-@router.message(Command('VPO'))
+@router.message(Command('vpo'))
 async def process_VPO(message: Message, state: FSMContext):
     await message.answer('Виберіть опцію', reply_markup=VPO)
     await state.set_state(Form.vpo_state)
 
 
 @router.message(F.text == 'Як отримати такий статус?')
-@router.message(Command('get_VPO_status'))
+@router.message(Command('get_vpo_status'))
 async def get_status_vpo(message: Message, state: FSMContext):
     await message.answer(status_vpo_txt, parse_mode='HTML')
     await state.clear()
@@ -260,6 +260,14 @@ async def evacuation_plan(message: Message, state: FSMContext):
 @router.message(Command('psychological_help'))
 async def psychological_help(message: Message, state: FSMContext):
     await message.answer(psychological_help_txt, parse_mode='HTML')
+    await state.clear()
+
+
+# EMPLOYING FOR MINORS
+@router.message(F.text == "Працевлаштування неповнолітніх")
+@router.message(Command('employing_for_minors'))
+async def employ_minors(message: Message, state: FSMContext):
+    await message.answer(employ_for_minors_txt, parse_mode='HTML')
     await state.clear()
 
 

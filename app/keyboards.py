@@ -21,8 +21,8 @@ REPLY KEYBOARDS
 '''
 main = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='ВПО'), KeyboardButton(text='Військовим')],
-    [KeyboardButton(text='Постраждалим від війни')],
-    [KeyboardButton(text='Насилля: що робити?'), KeyboardButton(text='Порядок евакуації')],
+    [KeyboardButton(text='Постраждалим від війни'), KeyboardButton(text='Насилля: що робити?')],
+    [KeyboardButton(text='Порядок евакуації'), KeyboardButton(text='Працевлаштування неповнолітніх')],
     [KeyboardButton(text='Психологічна допомога')],
     [KeyboardButton(text="Зворотній зв'язок")]],
 
